@@ -39,10 +39,10 @@ package UDP_Socket;
 //    }
 //}
 
-import javax.xml.crypto.Data;
+
 import java.io.*;
-import java.net.*;
 import java.util.Scanner;
+import java.net.*;
 
 public class UDPClient {
     public static void main(String[] args) {
@@ -54,7 +54,6 @@ public class UDPClient {
             byte[] sendData;
             byte[] receiveData = new byte[1024];
 
-            //Sending & receiving the data
             while (true) {
                 System.out.println("CLIENT:");
                 String message = sc.nextLine();
@@ -69,17 +68,15 @@ public class UDPClient {
 
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 socket.receive(receivePacket);
-                String response = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("SERVER MESSAGE : " + response);
+                String serverMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
+                System.out.println("SERVER MESSAGE: " + serverMessage);
             }
-            socket.close();
-        } catch (IOException e) {
-            System.out.println("ERROR: " + e.getMessage());
+
+        } catch (Exception e) {
+            System.out.println("ERROR : " + e.getMessage());
         }
     }
 }
-
-
 
 
 

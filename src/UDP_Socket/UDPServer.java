@@ -1,4 +1,4 @@
-//package UDP_Socket;
+package UDP_Socket;//package UDP_Socket;
 //
 //import java.net.*;
 //
@@ -46,6 +46,7 @@
 //    }
 //}
 
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -53,7 +54,7 @@ import java.util.Scanner;
 public class UDPServer {
     public static void main(String[] args) {
         try {
-            DatagramSocket socket = new DatagramSocket(9999); //binding the port
+            DatagramSocket socket = new DatagramSocket(9999);
 
             byte[] sendData;
             byte[] receiveData = new byte[1024];
@@ -61,23 +62,30 @@ public class UDPServer {
             while (true) {
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 socket.receive(receivePacket);
-                String msg = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("CLIENT SAYS: " + msg);
+                String client_msg = new String(receivePacket.getData(), 0, receivePacket.getLength());
+                System.out.println("CLIENT MESSAGE: " + client_msg);
 
-                //Replying the acknowledgement
-                sendData = msg.getBytes();
+                if (client_msg.equalsIgnoreCase("exit")) {
+                    System.out.println("CLIENT HAS ENDED THE CHAT!");
+                    break;
+                }
+
+                //Sending the acknowledgement
+                sendData = client_msg.getBytes();
 
                 InetAddress clientAddress = receivePacket.getAddress();
                 int port = receivePacket.getPort();
+
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientAddress, port);
                 socket.send(sendPacket);
+
             }
-        } catch (IOException e) {
-            System.out.println("ERROR: " + e.getMessage());
+            socket.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: "+ e.getMessage());
         }
     }
 }
-
 
 
 
